@@ -17,17 +17,10 @@ wss.on("connection", function connection(ws) {
       clients[key].send(message);
     }
   });
-  
+
   ws.on("close", close);
 });
 
 function close() {
     console.log('client disconnect');
-}
-
-function message(data, ws) {
-    const buf = Buffer.from(data); 
-    console.log("received: ", buf.toString());
-    //console.log("minor: ", data.version.minor);
-    ws.send(data);
 }
