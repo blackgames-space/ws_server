@@ -2,18 +2,32 @@ import { WebSocketServer } from "ws";
 
 const wss = new WebSocketServer({ port: 8080 });
 
-wss.on("connection", function connection(ws) {
-  ws.on("message", message); 
-  ws.on("close", close);
+// подключённые клиенты
+var clients = {};
 
-  ws.send("something");
+wss.on("connection", function connection(ws) {  
+  var id = Math.random();
+  clients[id] = ws;
+  console.log("новое соединение " + id);
+
+  ws.on('message', function(message) {
+    console.log('получено сообщение ' + message);
+
+    for (var key in clients) {
+      clients[key].send(message);
+    }
+  });
+  
+  ws.on("close", close);
 });
 
 function close() {
-    console.log('client disconect');
+    console.log('client disconnect');
 }
 
 function message(data, ws) {
-    console.log("received: ", data);
+    const buf = Buffer.from(data); 
+    console.log("received: ", buf.toString());
+    //console.log("minor: ", data.version.minor);
     ws.send(data);
 }
