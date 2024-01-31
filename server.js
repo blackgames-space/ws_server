@@ -5,7 +5,7 @@ const wss = new WebSocketServer({ port: 8080 });
 // подключённые клиенты
 var clients = {};
 
-wss.on("connection", function connection(ws) {  
+wss.on('connection', function connection(ws) {  
   var id = Math.random();
   clients[id] = ws;
   console.log("новое соединение " + id);
@@ -18,7 +18,7 @@ wss.on("connection", function connection(ws) {
     }
   });
 
-  ws.on("close", close);
+  ws.on('close', close);
 });
 
 function close() {
